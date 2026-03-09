@@ -3599,20 +3599,230 @@ em {
     opacity: 0.3;
 }
 
-/* Nullscapes Canvas - Geometry Dash Style */
-.nullscapes-canvas {
+/* ========================================
+   DECORATIVE ELEMENTS
+   ======================================== */
+
+/* Gradient Orbs */
+.gradient-orb {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 0;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
     pointer-events: none;
-    opacity: 0.6;
+    animation: orbFloat 20s ease-in-out infinite;
 }
 
-[data-theme="dark"] .nullscapes-canvas {
-    opacity: 0.8;
+.gradient-orb--1 {
+    width: 400px;
+    height: 400px;
+    top: -10%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(107, 127, 196, 0.3) 0%, transparent 70%);
+    animation-delay: 0s;
+}
+
+.gradient-orb--2 {
+    width: 300px;
+    height: 300px;
+    bottom: 10%;
+    left: -5%;
+    background: radial-gradient(circle, rgba(184, 232, 208, 0.3) 0%, transparent 70%);
+    animation-delay: -7s;
+}
+
+.gradient-orb--3 {
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    right: 20%;
+    background: radial-gradient(circle, rgba(212, 197, 232, 0.3) 0%, transparent 70%);
+    animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* Decorative Dots Pattern */
+.dots-pattern {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(107, 127, 196, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Floating Circles */
+.floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid rgba(107, 127, 196, 0.1);
+    animation: circleFloat 15s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.floating-circle--1 {
+    width: 600px;
+    height: 600px;
+    top: -20%;
+    right: -10%;
+    animation-delay: 0s;
+}
+
+.floating-circle--2 {
+    width: 400px;
+    height: 400px;
+    bottom: -10%;
+    left: -5%;
+    animation-delay: -5s;
+}
+
+.floating-circle--3 {
+    width: 300px;
+    height: 300px;
+    top: 40%;
+    left: 10%;
+    animation-delay: -10s;
+}
+
+@keyframes circleFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(20px, -30px) rotate(180deg); }
+}
+
+/* Corner Decorations */
+.corner-decoration {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+.corner-decoration--tl {
+    top: 0;
+    left: 0;
+    border-top: 3px solid var(--color-primary);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-2xl) 0 0 0;
+}
+
+.corner-decoration--br {
+    bottom: 0;
+    right: 0;
+    border-bottom: 3px solid var(--color-accent);
+    border-right: 3px solid var(--color-accent);
+    border-radius: 0 0 var(--radius-2xl) 0;
+}
+
+/* Animated Lines */
+.animated-line {
+    position: fixed;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    height: 1px;
+    width: 300px;
+    animation: lineMove 10s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+.animated-line--1 {
+    top: 20%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.animated-line--2 {
+    top: 50%;
+    right: -10%;
+    animation-delay: -3s;
+    animation-direction: reverse;
+}
+
+.animated-line--3 {
+    bottom: 30%;
+    left: -10%;
+    animation-delay: -6s;
+}
+
+@keyframes lineMove {
+    0%, 100% { transform: translateX(0); opacity: 0.3; }
+    50% { transform: translateX(100vw); opacity: 0.6; }
+}
+
+/* Sparkles */
+.sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    animation: sparkle 3s ease-in-out infinite;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.sparkle--1 { top: 10%; left: 20%; animation-delay: 0s; }
+.sparkle--2 { top: 30%; right: 15%; animation-delay: -0.5s; }
+.sparkle--3 { bottom: 20%; left: 30%; animation-delay: -1s; }
+.sparkle--4 { bottom: 40%; right: 25%; animation-delay: -1.5s; }
+.sparkle--5 { top: 60%; left: 50%; animation-delay: -2s; }
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .dots-pattern {
+    background-image: radial-gradient(circle, rgba(138, 159, 212, 0.15) 1px, transparent 1px);
+}
+
+[data-theme="dark"] .gradient-orb--1 {
+    background: radial-gradient(circle, rgba(138, 159, 212, 0.4) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .gradient-orb--2 {
+    background: radial-gradient(circle, rgba(184, 232, 208, 0.4) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .gradient-orb--3 {
+    background: radial-gradient(circle, rgba(212, 197, 232, 0.4) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .floating-circle {
+    border-color: rgba(138, 159, 212, 0.2);
+}
+
+[data-theme="dark"] .animated-line {
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gradient-orb--1,
+    .gradient-orb--2,
+    .gradient-orb--3 {
+        display: none;
+    }
+    
+    .floating-circle--1,
+    .floating-circle--2,
+    .floating-circle--3 {
+        display: none;
+    }
+    
+    .corner-decoration--tl,
+    .corner-decoration--br {
+        display: none;
+    }
 }
 
 /* ========================================
