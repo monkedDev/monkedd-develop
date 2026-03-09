@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monkedDev — Создание сайтов под ключ</title>
+    <meta name="description" content="Разработка сайтов, лендингов, интернет-магазинов и телеграм-ботов. Индивидуальный подход, современный дизайн, быстрая загрузка.">
+    
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header__container">
+            <a href="#" class="header__logo">monked<span class="accent">Dev</span></a>
+            <nav class="header__nav">
+                <a href="#about" class="header__link">Обо мне</a>
+                <a href="#services" class="header__link">Услуги</a>
+                <a href="#portfolio" class="header__link">Портфолио</a>
+                <a href="#contacts" class="header__link">Контакты</a>
+            </nav>
+            <a href="#order" class="btn btn--outline header__btn">Обсудить проект</a>
+            <button class="burger" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero__container">
+            <div class="hero__content">
+                <h1 class="hero__title">Создаю сайты, которые работают на ваш бизнес</h1>
+                <p class="hero__subtitle">Индивидуальная разработка, современный дизайн и внимание к деталям. Ваш проект — моя забота.</p>
+                <a href="#order" class="btn btn--primary">Заказать сайт</a>
+            </div>
+            <div class="hero__image">
+                <div class="hero__illustration"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Обо мне -->
+    <section class="about section" id="about">
+        <div class="container about__container">
+            <h2 class="section__title">Обо мне</h2>
+            <div class="about__content">
+                <div class="about__text">
+                    <p>Привет! Я <strong>monkedDev</strong> — веб-разработчик, специализирующийся на создании современных и функциональных сайтов.</p>
+                    <p>Мой подход — это сочетание чистого кода, продуманного дизайна и внимания к потребностям клиента. Каждый проект для меня — это возможность создать что-то уникальное и полезное.</p>
+                    <div class="about__tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3/SCSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Telegram Bots</span>
+                    </div>
+                </div>
+                <div class="about__stats">
+                    <div class="stat-card">
+                        <span class="stat-card__number">50+</span>
+                        <span class="stat-card__label">Проектов выполнено</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card__number">3+</span>
+                        <span class="stat-card__label">Года опыта</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card__number">100%</span>
+                        <span class="stat-card__label">Довольных клиентов</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги -->
+    <section class="services section" id="services">
+        <div class="container services__container">
+            <h2 class="section__title">Услуги</h2>
+            <div class="services__grid">
+                <div class="service-card">
+                    <div class="service-card__icon">🌐</div>
+                    <h3 class="service-card__title">Лендинги</h3>
+                    <p class="service-card__desc">Одностраничные сайты с высокой конверсией для продвижения товаров и услуг.</p>
+                    <span class="service-card__price">от 15 000 ₽</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">🛒</div>
+                    <h3 class="service-card__title">Интернет-магазины</h3>
+                    <p class="service-card__desc">Полноценные онлайн-магазины с каталогом, корзиной и оплатой.</p>
+                    <span class="service-card__price">от 40 000 ₽</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">📱</div>
+                    <h3 class="service-card__title">Телеграм-боты</h3>
+                    <p class="service-card__desc">Автоматизация бизнеса через Telegram: от простых ботов до сложных систем.</p>
+                    <span class="service-card__price">от 10 000 ₽</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">🔧</div>
+                    <h3 class="service-card__title">Поддержка сайтов</h3>
+                    <p class="service-card__desc">Обслуживание, обновление и доработка существующих проектов.</p>
+                    <span class="service-card__price">от 5 000 ₽/мес</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Портфолио -->
+    <section class="portfolio section" id="portfolio">
+        <div class="container portfolio__container">
+            <h2 class="section__title">Портфолио</h2>
+            <div class="portfolio__grid">
+                <div class="portfolio-card">
+                    <div class="portfolio-card__image">
+                        <div class="portfolio-placeholder">Проект 1</div>
+                    </div>
+                    <div class="portfolio-card__content">
+                        <h3 class="portfolio-card__title">Название проекта</h3>
+                        <p class="portfolio-card__desc">Краткое описание проекта и технологий</p>
+                        <a href="#" class="portfolio-card__link">Смотреть →</a>
+                    </div>
+                </div>
+                <div class="portfolio-card">
+                    <div class="portfolio-card__image">
+                        <div class="portfolio-placeholder">Проект 2</div>
+                    </div>
+                    <div class="portfolio-card__content">
+                        <h3 class="portfolio-card__title">Название проекта</h3>
+                        <p class="portfolio-card__desc">Краткое описание проекта и технологий</p>
+                        <a href="#" class="portfolio-card__link">Смотреть →</a>
+                    </div>
+                </div>
+                <div class="portfolio-card">
+                    <div class="portfolio-card__image">
+                        <div class="portfolio-placeholder">Проект 3</div>
+                    </div>
+                    <div class="portfolio-card__content">
+                        <h3 class="portfolio-card__title">Название проекта</h3>
+                        <p class="portfolio-card__desc">Краткое описание проекта и технологий</p>
+                        <a href="#" class="portfolio-card__link">Смотреть →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Этапы работы -->
+    <section class="stages section" id="stages">
+        <div class="container stages__container">
+            <h2 class="section__title">Этапы работы</h2>
+            <div class="stages__timeline">
+                <div class="stage-item">
+                    <div class="stage-item__number">01</div>
+                    <h3 class="stage-item__title">Техническое задание</h3>
+                    <p class="stage-item__desc">Обсуждаем ваши требования, составляем подробное ТЗ</p>
+                </div>
+                <div class="stage-item">
+                    <div class="stage-item__number">02</div>
+                    <h3 class="stage-item__title">Дизайн</h3>
+                    <p class="stage-item__desc">Создаю макет, согласовываю визуальную часть</p>
+                </div>
+                <div class="stage-item">
+                    <div class="stage-item__number">03</div>
+                    <h3 class="stage-item__title">Верстка и код</h3>
+                    <p class="stage-item__desc">Разрабатываю функционал, интегрирую все системы</p>
+                </div>
+                <div class="stage-item">
+                    <div class="stage-item__number">04</div>
+                    <h3 class="stage-item__title">Запуск</h3>
+                    <p class="stage-item__desc">Тестирую, размещаю на хостинге, передаю проект</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Форма заказа -->
+    <section class="order section" id="order">
+        <div class="container order__container">
+            <h2 class="section__title">Заказать проект</h2>
+            <p class="order__subtitle">Заполните форму, и я свяжусь с вами в ближайшее время</p>
+            
+            <!-- Форма через Web3Forms (бесплатно, безлимитно) -->
+            <form class="order-form" id="orderForm" action="https://api.web3forms.com/submit" method="POST">
+                <!-- Доступ ключ -->
+                <input type="hidden" name="access_key" value="2f721ed1-ad6e-4e1a-8fba-a705f42a6f08">
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">Ваше имя <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Иван Иванов" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact" class="form-label">Способ связи <span class="required">*</span></label>
+                    <input type="text" id="contact" name="contact" class="form-input" placeholder="Email, Telegram или телефон" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="type" class="form-label">Тип проекта</label>
+                        <select id="type" name="type" class="form-input">
+                            <option value="">Выберите тип</option>
+                            <option value="Лендинг">Лендинг</option>
+                            <option value="Интернет-магазин">Интернет-магазин</option>
+                            <option value="Телеграм-бот">Телеграм-бот</option>
+                            <option value="Поддержка">Поддержка</option>
+                            <option value="Другое">Другое</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget" class="form-label">Бюджет</label>
+                        <select id="budget" name="budget" class="form-input">
+                            <option value="">Не указан</option>
+                            <option value="10-20k">10 000 — 20 000 ₽</option>
+                            <option value="20-40k">20 000 — 40 000 ₽</option>
+                            <option value="40-60k">40 000 — 60 000 ₽</option>
+                            <option value="60k+">Более 60 000 ₽</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message" class="form-label">Описание задачи</label>
+                    <textarea id="message" name="message" class="form-input form-textarea" placeholder="Расскажите подробнее о вашем проекте..." rows="5"></textarea>
+                </div>
+                
+                <div class="form-group form-checkbox">
+                    <input type="checkbox" id="privacy" name="privacy" required>
+                    <label for="privacy" class="form-checkbox-label">Согласен на обработку персональных данных <span class="required">*</span></label>
+                </div>
+                
+                <!-- Honeypot для защиты от спама -->
+                <input type="checkbox" name="botcheck" style="display:none">
+                
+                <!-- Скрытое поле с темой письма -->
+                <input type="hidden" name="subject" value="🔥 Новая заявка с сайта monkedDev">
+                <input type="hidden" name="from_name" value="monkedDev Site">
+                <input type="hidden" name="replyto" value="monkeddev@inbox.ru">
+                
+                <button type="submit" class="btn btn--primary btn--full">Отправить заявку</button>
+                
+                <div class="form-status" id="formStatus"></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section class="contacts section" id="contacts">
+        <div class="container contacts__container">
+            <h2 class="section__title">Контакты</h2>
+            <div class="contacts__content">
+                <div class="contacts__info">
+                    <p class="contacts__text">Готовы обсудить проект? Напишите мне!</p>
+                    <div class="contacts__links">
+                        <a href="mailto:monkeddev@inbox.ru" class="contact-link">monkeddev@inbox.ru</a>
+                        <a href="https://t.me/lilmonkedd" class="contact-link" target="_blank">Telegram: @lilmonkedd</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__content">
+                <span class="footer__logo">monked<span class="accent">Dev</span></span>
+                <p class="footer__copyright">© 2025 monkedDev. Все права защищены.</p>
+            </div>
+            <div class="footer__links">
+                <a href="#" class="footer__link">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
