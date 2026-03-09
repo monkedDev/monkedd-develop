@@ -129,6 +129,9 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
+    <!-- Canvas Background -->
+    <canvas id="heroCanvas" class="hero-canvas"></canvas>
+
     <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="hero__bg">
@@ -1264,6 +1267,50 @@
         <div class="modal__content">
             <button class="modal__close" aria-label="Закрыть">&times;</button>
             <div class="modal__body" id="portfolioModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-widget__button" id="chatButton">
+            <span class="chat-widget__icon">💬</span>
+            <span class="chat-widget__badge">!</span>
+        </div>
+        <div class="chat-widget__window" id="chatWindow">
+            <div class="chat-widget__header">
+                <div class="chat-widget__avatar">👨‍💻</div>
+                <div class="chat-widget__info">
+                    <span class="chat-widget__name">monkedDev</span>
+                    <span class="chat-widget__status">Онлайн</span>
+                </div>
+                <button class="chat-widget__close" id="chatClose">&times;</button>
+            </div>
+            <div class="chat-widget__messages" id="chatMessages">
+                <div class="chat-message chat-message--bot">
+                    <p>Привет! 👋 Чем могу помочь?</p>
+                </div>
+            </div>
+            <div class="chat-widget__input">
+                <input type="text" id="chatInput" placeholder="Введите сообщение...">
+                <button id="chatSend">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions" id="quickActions">
+        <button class="quick-action-btn" data-action="scroll-top" aria-label="Наверх">⬆️</button>
+        <button class="quick-action-btn" data-action="theme-toggle" aria-label="Тема">🌙</button>
+        <button class="quick-action-btn" data-action="share" aria-label="Поделиться">🔗</button>
+        <button class="quick-action-btn" data-action="contacts" aria-label="Контакты">📞</button>
+    </div>
+
+    <!-- Easter Egg -->
+    <div class="easter-egg" id="easterEgg">
+        <div class="easter-egg__content">
+            <span class="easter-egg__emoji">🎉</span>
+            <p>Вы нашли пасхалку!</p>
+            <span class="easter-egg__code">KONAMI</span>
         </div>
     </div>
 

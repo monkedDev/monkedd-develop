@@ -1218,6 +1218,456 @@
     }
 
     // ========================================
+    // Canvas Background (Network Animation)
+    // ========================================
+
+    class CanvasBackground {
+        constructor() {
+            this.canvas = document.getElementById('heroCanvas');
+            if (!this.canvas) return;
+            
+            this.ctx = this.canvas.getContext('2d');
+            this.particles = [];
+            this.particleCount = 80;
+            this.connectionDistance = 150;
+            this.mouse = { x: null, y: null, radius: 200 };
+            
+            this.init();
+        }
+
+        init() {
+            this.resize();
+            this.createParticles();
+            this.animate();
+            
+            window.addEventListener('resize', () => this.resize());
+            window.addEventListener('mousemove', (e) => {
+                this.mouse.x = e.clientX;
+                this.mouse.y = e.clientY;
+            });
+        }
+
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+
+        createParticles() {
+            this.particles = [];
+            for (let i = 0; i < this.particleCount; i++) {
+                this.particles.push({
+                    x: Math.random() * this.canvas.width,
+                    y: Math.random() * this.canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 3 + 1
+                });
+            }
+        }
+
+        animate() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            // Update and draw particles
+            this.particles.forEach(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+
+                // Bounce off edges
+                if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+
+                // Mouse interaction
+                const dx = this.mouse.x - particle.x;
+                const dy = this.mouse.y - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < this.mouse.radius) {
+                    const force = (this.mouse.radius - distance) / this.mouse.radius;
+                    particle.x -= dx * force * 0.02;
+                    particle.y -= dy * force * 0.02;
+                }
+
+                // Draw particle
+                this.ctx.beginPath();
+                this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                this.ctx.fillStyle = 'rgba(123, 143, 212, 0.5)';
+                this.ctx.fill();
+            });
+
+            // Draw connections
+            this.particles.forEach((p1, i) => {
+                this.particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < this.connectionDistance) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(p1.x, p1.y);
+                        this.ctx.lineTo(p2.x, p2.y);
+                        this.ctx.strokeStyle = `rgba(123, 143, 212, ${1 - distance / this.connectionDistance})`;
+                        this.ctx.lineWidth = 1;
+                        this.ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(() => this.animate());
+        }
+    }
+
+    // ========================================
+    // Chat Widget
+    // ========================================
+
+    class ChatWidget {
+        constructor() {
+            this.widget = document.getElementById('chatWidget');
+            this.button = document.getElementById('chatButton');
+            this.window = document.getElementById('chatWindow');
+            this.close = document.getElementById('chatClose');
+            this.messages = document.getElementById('chatMessages');
+            this.input = document.getElementById('chatInput');
+            this.send = document.getElementById('chatSend');
+            
+            if (!this.widget) return;
+            
+            this.init();
+        }
+
+        init() {
+            this.button.addEventListener('click', () => this.toggle());
+            this.close.addEventListener('click', () => this.closeChat());
+            this.send.addEventListener('click', () => this.sendMessage());
+            this.input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.sendMessage();
+            });
+
+            // Auto-responses
+            this.responses = [
+                'Спасибо за вопрос! Я скоро отвечу.',
+                'Интересный вопрос! Дайте мне минутку подумать.',
+                'Отличная идея! Давайте обсудим детали.',
+                'Я могу помочь вам с этим проектом!',
+                'Свяжитесь со мной в Telegram для быстрого ответа: @lilmonkedd'
+            ];
+        }
+
+        toggle() {
+            this.window.classList.toggle('active');
+            if (this.window.classList.contains('active')) {
+                setTimeout(() => this.input.focus(), 300);
+            }
+        }
+
+        closeChat() {
+            this.window.classList.remove('active');
+        }
+
+        sendMessage() {
+            const text = this.input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            this.addMessage(text, 'user');
+            this.input.value = '';
+
+            // Bot response
+            setTimeout(() => {
+                const response = this.responses[Math.floor(Math.random() * this.responses.length)];
+                this.addMessage(response, 'bot');
+            }, 1000 + Math.random() * 2000);
+        }
+
+        addMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `chat-message chat-message--${type}`;
+            message.innerHTML = `<p>${text}</p>`;
+            this.messages.appendChild(message);
+            this.messages.scrollTop = this.messages.scrollHeight;
+        }
+    }
+
+    // ========================================
+    // Quick Actions
+    // ========================================
+
+    class QuickActions {
+        constructor() {
+            this.container = document.getElementById('quickActions');
+            if (!this.container) return;
+            
+            this.init();
+        }
+
+        init() {
+            this.container.addEventListener('click', (e) => {
+                const btn = e.target.closest('.quick-action-btn');
+                if (!btn) return;
+
+                const action = btn.dataset.action;
+                this.handleAction(action);
+            });
+        }
+
+        handleAction(action) {
+            switch(action) {
+                case 'scroll-top':
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    break;
+                case 'theme-toggle':
+                    const event = new Event('click');
+                    document.getElementById('themeToggle')?.dispatchEvent(event);
+                    break;
+                case 'share':
+                    this.share();
+                    break;
+                case 'contacts':
+                    document.querySelector('#contacts')?.scrollIntoView({ behavior: 'smooth' });
+                    break;
+            }
+        }
+
+        async share() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'monkedDev — Создание сайтов',
+                        text: 'Закажите современный сайт у monkedDev!',
+                        url: window.location.href
+                    });
+                } catch (err) {
+                    console.log('Share canceled');
+                }
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Ссылка скопирована в буфер обмена!');
+            }
+        }
+    }
+
+    // ========================================
+    // Easter Egg (Konami Code)
+    // ========================================
+
+    class EasterEgg {
+        constructor() {
+            this.egg = document.getElementById('easterEgg');
+            if (!this.egg) return;
+            
+            this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+            this.inputSequence = [];
+            
+            this.init();
+        }
+
+        init() {
+            document.addEventListener('keydown', (e) => {
+                this.inputSequence.push(e.key);
+                this.inputSequence = this.inputSequence.slice(-10);
+
+                if (this.inputSequence.join(',') === this.konamiCode.join(',')) {
+                    this.trigger();
+                    this.inputSequence = [];
+                }
+            });
+
+            this.egg.addEventListener('click', () => this.hide());
+        }
+
+        trigger() {
+            this.egg.classList.add('active');
+            
+            // Confetti effect
+            this.createConfetti();
+            
+            setTimeout(() => this.hide(), 5000);
+        }
+
+        hide() {
+            this.egg.classList.remove('active');
+        }
+
+        createConfetti() {
+            const colors = ['#7B8FD4', '#B8C5E8', '#C5E8D4', '#D4C5E8', '#F0D4C5'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: fixed;
+                    width: 10px;
+                    height: 10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    left: ${Math.random() * 100}vw;
+                    top: -10px;
+                    z-index: 9999;
+                    animation: confettiFall ${2 + Math.random() * 3}s linear forwards;
+                `;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+
+            // Add confetti animation
+            if (!document.querySelector('#confettiStyle')) {
+                const style = document.createElement('style');
+                style.id = 'confettiStyle';
+                style.textContent = `
+                    @keyframes confettiFall {
+                        to {
+                            transform: translateY(100vh) rotate(720deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    }
+
+    // ========================================
+    // 3D Tilt Effect
+    // ========================================
+
+    class TiltEffect {
+        constructor() {
+            this.cards = document.querySelectorAll('.service-card, .portfolio-card, .benefit-card');
+            this.init();
+        }
+
+        init() {
+            this.cards.forEach(card => {
+                card.classList.add('tilt-card');
+                
+                const inner = document.createElement('div');
+                inner.className = 'tilt-card__inner';
+                inner.innerHTML = card.innerHTML;
+                card.innerHTML = '';
+                card.appendChild(inner);
+
+                card.addEventListener('mousemove', (e) => this.handleMove(e, card, inner));
+                card.addEventListener('mouseleave', () => this.handleLeave(inner));
+            });
+        }
+
+        handleMove(e, card, inner) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        }
+
+        handleLeave(inner) {
+            inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        }
+    }
+
+    // ========================================
+    // Achievements Counter
+    // ========================================
+
+    class Achievements {
+        constructor() {
+            this.section = document.querySelector('.achievements');
+            if (!this.section) return;
+            
+            this.init();
+        }
+
+        init() {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    this.animateAchievements();
+                    observer.unobserve(this.section);
+                }
+            }, { threshold: 0.5 });
+
+            observer.observe(this.section);
+        }
+
+        animateAchievements() {
+            const numbers = document.querySelectorAll('.achievement-card__number');
+            
+            numbers.forEach(num => {
+                const target = parseInt(num.getAttribute('data-count'));
+                if (!target) return;
+
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        num.textContent = target + '+';
+                        clearInterval(timer);
+                    } else {
+                        num.textContent = Math.floor(current);
+                    }
+                }, 30);
+            });
+        }
+    }
+
+    // ========================================
+    // Mobile Menu
+    // ========================================
+
+    class MobileMenu {
+        constructor() {
+            this.burger = document.querySelector('.burger');
+            this.overlay = document.getElementById('mobileMenuOverlay');
+            this.init();
+        }
+
+        init() {
+            if (!this.burger) return;
+
+            this.burger.addEventListener('click', () => {
+                this.burger.classList.toggle('active');
+                this.overlay.classList.toggle('active');
+                document.body.style.overflow = this.overlay.classList.contains('active') ? 'hidden' : '';
+            });
+
+            this.overlay.addEventListener('click', () => this.close());
+        }
+
+        close() {
+            this.burger.classList.remove('active');
+            this.overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // ========================================
+    // Audio Feedback (Optional)
+    // ========================================
+
+    class AudioFeedback {
+        constructor() {
+            this.enabled = false;
+            this.sounds = {};
+            this.init();
+        }
+
+        init() {
+            // Create audio context for subtle click sounds
+            // Disabled by default for better UX
+        }
+
+        playClick() {
+            if (!this.enabled) return;
+            // Implement subtle click sound
+        }
+    }
+
+    // ========================================
     // Console Message
     // ========================================
 
@@ -1289,6 +1739,14 @@
        .use(RevealOnScroll)
        .use(StaggerAnimation)
        .use(MagneticButtons)
+       .use(CanvasBackground)
+       .use(ChatWidget)
+       .use(QuickActions)
+       .use(EasterEgg)
+       .use(TiltEffect)
+       .use(Achievements)
+       .use(MobileMenu)
+       .use(AudioFeedback)
        .use(ConsoleMessage);
 
     app.init();
