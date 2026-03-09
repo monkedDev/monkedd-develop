@@ -135,23 +135,6 @@ export default async function handler(request) {
 
       orders.set(order.id, order);
 
-      // Отправляем уведомление в Telegram (если настроено)
-      if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-        try {
-          await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: process.env.TELEGRAM_CHAT_ID,
-              text: `🔥 Новая заявка!\n\n👤 ${name}\n📬 ${contact}\n📋 ${data.type || 'Не указан'}\n💰 ${data.budget || 'Не указан'}`,
-              parse_mode: 'HTML',
-            }),
-          });
-        } catch (e) {
-          console.error('Telegram notification failed:', e);
-        }
-      }
-
       return new Response(
         JSON.stringify({
           success: true,
