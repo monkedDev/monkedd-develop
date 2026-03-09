@@ -614,7 +614,7 @@
     }
 
     // ========================================
-    // Form Handling (LocalStorage - без сервера)
+    // Form Handling (Web3Forms)
     // ========================================
 
     class FormHandler {
@@ -622,9 +622,6 @@
             this.form = document.querySelector(SELECTORS.orderForm);
             this.statusElement = document.querySelector(SELECTORS.formStatus);
             if (!this.form) return;
-
-            // Ключ для localStorage
-            this.storageKey = 'monkeddev_orders';
 
             this.init();
         }
@@ -635,7 +632,7 @@
             this.initRealTimeValidation();
         }
 
-        handleSubmit(e) {
+        async handleSubmit(e) {
             e.preventDefault();
 
             // Validate form
@@ -659,32 +656,22 @@
             submitBtn.innerHTML = '<span class="btn__loader"></span> Отправка...';
 
             try {
-                // Собираем данные формы
                 const formData = new FormData(this.form);
-                const data = Object.fromEntries(formData.entries());
 
-                // Создаём заказ
-                const order = {
-                    id: Date.now().toString(),
-                    ...data,
-                    status: 'new',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                };
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-                // Сохраняем в localStorage
-                const orders = this.getOrders();
-                orders.unshift(order);
-                localStorage.setItem(this.storageKey, JSON.stringify(orders));
+                const result = await response.json();
 
-                // Успех!
-                this.showStatus('Спасибо! Ваша заявка отправлена. Я свяжусь с вами в ближайшее время.', 'success');
-                this.form.reset();
-                this.showToast('Заявка успешно отправлена!', 'success');
-
-                // Отправляем дубликат на Web3Forms (опционально)
-                this.sendToWeb3Forms(data);
-
+                if (result.success || response.ok) {
+                    this.showStatus('Спасибо! Ваша заявка отправлена. Я свяжусь с вами в ближайшее время.', 'success');
+                    this.form.reset();
+                    this.showToast('Заявка успешно отправлена!', 'success');
+                } else {
+                    throw new Error(result.message || 'Ошибка отправки');
+                }
             } catch (error) {
                 console.error('Form submission error:', error);
                 this.showStatus('Ошибка отправки. Попробуйте позже или свяжитесь напрямую.', 'error');
@@ -692,28 +679,6 @@
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
-            }
-        }
-
-        getOrders() {
-            const stored = localStorage.getItem(this.storageKey);
-            return stored ? JSON.parse(stored) : [];
-        }
-
-        // Опционально: дублирование на Web3Forms
-        async sendToWeb3Forms(data) {
-            try {
-                const web3FormData = new FormData();
-                Object.keys(data).forEach(key => {
-                    web3FormData.append(key, data[key]);
-                });
-                
-                await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: web3FormData,
-                });
-            } catch (error) {
-                console.error('Web3Forms error:', error);
             }
         }
 

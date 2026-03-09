@@ -1,6 +1,7 @@
 /**
- * monkedDev Admin Panel - Client Side Only
- * Хранение данных в localStorage (без сервера)
+ * monkedDev Admin Panel
+ * Заявки приходят через Web3Forms на почту monkeddev@inbox.ru
+ * Это демонстрационная версия - показывает пример управления
  */
 
 // ========================================
@@ -8,7 +9,41 @@
 // ========================================
 
 const STORAGE_KEY = 'monkeddev_admin_token';
-const ORDERS_KEY = 'monkeddev_orders';
+const ORDERS_KEY = 'monkeddev_orders_demo';
+
+// Демо-заявки для примера
+const DEMO_ORDERS = [
+    {
+        id: '1709901234567',
+        name: 'Иван Петров',
+        contact: 'ivan@example.com',
+        type: 'Лендинг',
+        budget: '10-20k',
+        message: 'Нужен лендинг для компании по ремонту квартир',
+        status: 'new',
+        createdAt: '2025-03-09T10:30:00.000Z',
+    },
+    {
+        id: '1709901234568',
+        name: 'Анна Смирнова',
+        contact: '@annas',
+        type: 'Интернет-магазин',
+        budget: '40-60k',
+        message: 'Хочу магазин одежды с интеграцией 1С',
+        status: 'in_progress',
+        createdAt: '2025-03-08T14:20:00.000Z',
+    },
+    {
+        id: '1709901234569',
+        name: 'Дмитрий Козлов',
+        contact: '+7 999 123-45-67',
+        type: 'Telegram-бот',
+        budget: '20-40k',
+        message: 'Бот для доставки еды с оплатой',
+        status: 'completed',
+        createdAt: '2025-03-07T09:15:00.000Z',
+    },
+];
 
 let allOrders = [];
 let currentView = 'dashboard';
@@ -30,7 +65,7 @@ const exportBtn = document.getElementById('exportBtn');
 // Authentication (Simple Client-Side)
 // ========================================
 
-const ADMIN_PASSWORD = 'monkeddev2025'; // Поменяй на свой пароль
+const ADMIN_PASSWORD = 'monkeddev2025';
 
 function checkAuth() {
     const token = localStorage.getItem(STORAGE_KEY);
@@ -70,19 +105,27 @@ logoutBtn.addEventListener('click', () => {
 });
 
 // ========================================
-// Orders Management (localStorage)
+// Orders Management
 // ========================================
 
 function loadOrders() {
+    // Загружаем из localStorage или используем демо
     const stored = localStorage.getItem(ORDERS_KEY);
-    allOrders = stored ? JSON.parse(stored) : [];
+    
+    if (stored) {
+        allOrders = JSON.parse(stored);
+    } else {
+        // Первые загружаем демо
+        allOrders = DEMO_ORDERS;
+        saveOrders();
+    }
+    
     updateStats();
     renderRecentOrders();
 }
 
 function saveOrders() {
     localStorage.setItem(ORDERS_KEY, JSON.stringify(allOrders));
-    updateStats();
 }
 
 function addOrder(orderData) {
