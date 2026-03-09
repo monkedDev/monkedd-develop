@@ -9,42 +9,46 @@
 
 :root {
     /* ========================================
-       Цветовая палитра
+       Цветовая палитра - LIGHT THEME
        ======================================== */
     
-    /* Основные фоны */
-    --color-bg: #FAFAFB;
-    --color-bg-alt: #F5F6FA;
+    /* Основные фоны - улучшенные градиенты */
+    --color-bg: linear-gradient(135deg, #F8F9FF 0%, #F0F4FF 50%, #E8F0FE 100%);
+    --color-bg-solid: #FAFBFF;
+    --color-bg-alt: linear-gradient(135deg, #F0F4FF 0%, #E8EDFF 100%);
+    --color-bg-alt-solid: #F5F7FF;
     --color-bg-white: #FFFFFF;
     --color-bg-dark: #1A1A2E;
     
-    /* Пастельные акценты */
-    --color-accent: #B8C5E8;
-    --color-accent-light: #D4DCF0;
-    --color-accent-soft: #E8EDF7;
-    --color-accent-dark: #9AB0E0;
+    /* Пастельные акценты - более насыщенные */
+    --color-accent: #A4B8E8;
+    --color-accent-light: #C5D4F0;
+    --color-accent-soft: #E0E8F8;
+    --color-accent-dark: #8A9FD4;
     
     /* Градиентные акценты */
-    --color-mint: #C5E8D4;
+    --color-mint: #B8E8D0;
     --color-lavender: #D4C5E8;
     --color-peach: #F0D4C5;
-    --color-sky: #C5D8E8;
-    --color-blush: #E8C5D0;
-    --color-lemon: #F5E8C5;
+    --color-sky: #B8D8E8;
+    --color-blush: #E8C5D8;
+    --color-lemon: #F5F0C5;
+    --color-rose: #E8B8C5;
     
-    /* Основные цвета бренда */
-    --color-primary: #7B8FD4;
-    --color-primary-light: #95A5E0;
-    --color-primary-hover: #6A7EC0;
-    --color-primary-dark: #5A6DAB;
-    --color-primary-gradient: linear-gradient(135deg, #7B8FD4 0%, #95A5E0 100%);
+    /* Основные цвета бренда - ярче */
+    --color-primary: #6B7FC4;
+    --color-primary-light: #8A9FD4;
+    --color-primary-hover: #5A6FB4;
+    --color-primary-dark: #4A5FA4;
+    --color-primary-gradient: linear-gradient(135deg, #6B7FC4 0%, #8A9FD4 100%);
+    --color-primary-glow: rgba(107, 127, 196, 0.3);
     
-    /* Текст */
-    --color-text: #4A4A55;
-    --color-text-light: #6B6B75;
-    --color-text-muted: #9A9AA5;
+    /* Текст - контрастнее */
+    --color-text: #3A3A45;
+    --color-text-light: #5A5A65;
+    --color-text-muted: #8A8A95;
     --color-text-inverse: #FFFFFF;
-    --color-text-heading: #2D2D35;
+    --color-text-heading: #1A1A25;
     
     /* Семантические цвета */
     --color-success: #10B981;
@@ -56,18 +60,23 @@
     --color-info: #3B82F6;
     --color-info-light: #DBEAFE;
     
-    /* Границы и разделители */
-    --color-border: #E5E7EB;
-    --color-border-light: #F3F4F6;
-    --color-border-dark: #D1D5DB;
+    /* Границы и разделители - мягче */
+    --color-border: #E0E5F0;
+    --color-border-light: #F0F3F8;
+    --color-border-dark: #C5CCD8;
     
-    /* Тени */
-    --shadow-xs: 0 1px 2px rgba(123, 143, 212, 0.05);
-    --shadow-soft: 0 4px 20px rgba(123, 143, 212, 0.08);
-    --shadow-medium: 0 8px 30px rgba(123, 143, 212, 0.12);
-    --shadow-hover: 0 12px 40px rgba(123, 143, 212, 0.15);
-    --shadow-elevated: 0 20px 60px rgba(123, 143, 212, 0.2);
-    --shadow-glow: 0 0 40px rgba(123, 143, 212, 0.3);
+    /* Тени - более глубокие */
+    --shadow-xs: 0 1px 2px rgba(107, 127, 196, 0.08);
+    --shadow-soft: 0 4px 20px rgba(107, 127, 196, 0.12);
+    --shadow-medium: 0 8px 30px rgba(107, 127, 196, 0.16);
+    --shadow-hover: 0 12px 40px rgba(107, 127, 196, 0.2);
+    --shadow-elevated: 0 20px 60px rgba(107, 127, 196, 0.25);
+    --shadow-glow: 0 0 40px rgba(107, 127, 196, 0.4);
+    
+    /* Градиенты для карточек */
+    --gradient-card-1: linear-gradient(135deg, rgba(107, 127, 196, 0.05) 0%, rgba(138, 159, 212, 0.05) 100%);
+    --gradient-card-2: linear-gradient(135deg, rgba(184, 232, 208, 0.05) 0%, rgba(184, 216, 232, 0.05) 100%);
+    --gradient-card-3: linear-gradient(135deg, rgba(212, 197, 232, 0.05) 0%, rgba(240, 212, 197, 0.05) 100%);
     
     /* Шрифты */
     --font-main: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -106,26 +115,48 @@
     --z-cursor: 800;
 }
 
-/* Тёмная тема */
+/* Тёмная тема - улучшенная */
 [data-theme="dark"] {
-    --color-bg: #0F0F1A;
-    --color-bg-alt: #1A1A2E;
+    --color-bg: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 50%, #151525 100%);
+    --color-bg-solid: #0F0F1A;
+    --color-bg-alt: linear-gradient(135deg, #1A1A2E 0%, #202035 100%);
+    --color-bg-alt-solid: #1A1A2E;
     --color-bg-white: #1E1E32;
     
     --color-accent-soft: #2D2D44;
     --color-accent-light: #3D3D5C;
+    --color-accent: #8A9FD4;
     
     --color-text: #B8B8C0;
     --color-text-light: #9A9AA5;
     --color-text-muted: #6B6B75;
     --color-text-heading: #E8E8E8;
     
+    --color-primary: #8A9FD4;
+    --color-primary-light: #9FB0E0;
+    --color-primary-hover: #7A8FC4;
+    --color-primary-glow: rgba(138, 159, 212, 0.4);
+    
     --color-border: #2D2D44;
     --color-border-light: #3D3D5C;
+    --color-border-dark: #4D4D6C;
     
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
-    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.4);
-    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
+    --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] body::before {
+    background: radial-gradient(ellipse, rgba(138, 159, 212, 0.1) 0%, transparent 70%);
+}
+
+[data-theme="dark"] body::after {
+    background: radial-gradient(ellipse, rgba(184, 232, 208, 0.08) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .section::before {
+    background: linear-gradient(180deg, transparent 0%, rgba(138, 159, 212, 0.03) 50%, transparent 100%);
 }
 
 /* ========================================
@@ -151,9 +182,44 @@ body {
     font-size: 1rem;
     line-height: 1.6;
     color: var(--color-text);
-    background-color: var(--color-bg);
+    background: var(--color-bg);
+    background-attachment: fixed;
     overflow-x: hidden;
     min-height: 100vh;
+    position: relative;
+}
+
+/* Декоративные фоновые элементы */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    right: -20%;
+    width: 80%;
+    height: 150%;
+    background: radial-gradient(ellipse, rgba(107, 127, 196, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    animation: bgFloat 20s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%;
+    left: -10%;
+    width: 60%;
+    height: 100%;
+    background: radial-gradient(ellipse, rgba(184, 232, 208, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    animation: bgFloat 25s ease-in-out infinite reverse;
+}
+
+@keyframes bgFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 
 /* Убираем выделение */
@@ -312,10 +378,24 @@ em {
 
 .section {
     padding: var(--section-padding);
+    position: relative;
 }
 
 .section:nth-child(even) {
     background: var(--color-bg-alt);
+    background-attachment: fixed;
+}
+
+/* Декоративные элементы для секций */
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent 0%, rgba(107, 127, 196, 0.02) 50%, transparent 100%);
+    pointer-events: none;
 }
 
 /* ========================================
@@ -761,7 +841,7 @@ em {
 }
 
 /* ========================================
-   Hero Section
+   Hero Section - Улучшенный фон
    ======================================== */
 
 .hero {
@@ -771,6 +851,36 @@ em {
     display: flex;
     align-items: center;
     overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 80%;
+    height: 150%;
+    background: radial-gradient(ellipse, rgba(107, 127, 196, 0.1) 0%, transparent 70%);
+    animation: gradientMove 15s ease-in-out infinite;
+    z-index: 0;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 60%;
+    height: 80%;
+    background: radial-gradient(ellipse, rgba(184, 232, 208, 0.08) 0%, transparent 70%);
+    animation: gradientMove 20s ease-in-out infinite reverse;
+    z-index: 0;
+}
+
+@keyframes gradientMove {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-5%, 5%) scale(1.1); }
+    66% { transform: translate(5%, -5%) scale(0.95); }
 }
 
 .hero__bg {
@@ -1295,6 +1405,19 @@ em {
     transition: transform var(--transition-base);
 }
 
+.service-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(107, 127, 196, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+}
+
 .service-card:hover {
     transform: translateY(-10px);
     box-shadow: var(--shadow-elevated);
@@ -1302,6 +1425,10 @@ em {
 
 .service-card:hover::before {
     transform: scaleX(1);
+}
+
+.service-card:hover::after {
+    opacity: 1;
 }
 
 .service-card.hidden {
