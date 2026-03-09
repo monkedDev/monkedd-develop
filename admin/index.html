@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | monkedDev</title>
+    <meta name="description" content="Панель управления заявками">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="admin-login" id="adminLogin">
+        <div class="admin-login__card">
+            <div class="admin-login__header">
+                <span class="admin-login__logo">🔐 monkedDev Admin</span>
+            </div>
+            <form class="admin-login__form" id="loginForm">
+                <div class="form-group">
+                    <label for="password" class="form-label">Пароль администратора</label>
+                    <input type="password" id="password" class="form-input" placeholder="Введите пароль" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full">Войти</button>
+                <p class="admin-login__hint">Пароль по умолчанию: monkeddev2025</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard hidden" id="adminDashboard">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar__header">
+                <span class="admin-sidebar__logo">🚀 monkedDev</span>
+            </div>
+            <nav class="admin-sidebar__nav">
+                <a href="#" class="admin-sidebar__link active" data-view="dashboard">
+                    <span class="link__icon">📊</span>
+                    Дашборд
+                </a>
+                <a href="#" class="admin-sidebar__link" data-view="orders">
+                    <span class="link__icon">📋</span>
+                    Заявки
+                    <span class="admin-sidebar__badge" id="newOrdersBadge">0</span>
+                </a>
+                <a href="#" class="admin-sidebar__link" data-view="analytics">
+                    <span class="link__icon">📈</span>
+                    Аналитика
+                </a>
+                <a href="#" class="admin-sidebar__link" data-view="settings">
+                    <span class="link__icon">⚙️</span>
+                    Настройки
+                </a>
+            </nav>
+            <div class="admin-sidebar__footer">
+                <a href="../index.html" class="admin-sidebar__link">
+                    <span class="link__icon">🏠</span>
+                    На сайт
+                </a>
+                <button class="admin-sidebar__link" id="logoutBtn">
+                    <span class="link__icon">🚪</span>
+                    Выйти
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Header -->
+            <header class="admin-header">
+                <h1 class="admin-header__title" id="pageTitle">Дашборд</h1>
+                <div class="admin-header__actions">
+                    <button class="admin-icon-btn" id="refreshBtn" title="Обновить">
+                        🔄
+                    </button>
+                    <button class="admin-icon-btn" id="exportBtn" title="Экспорт">
+                        📥
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div class="admin-view active" id="view-dashboard">
+                <div class="admin-stats">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-card__icon">📋</div>
+                        <div class="admin-stat-card__content">
+                            <span class="admin-stat-card__value" id="totalOrders">0</span>
+                            <span class="admin-stat-card__label">Всего заявок</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-card__icon">🆕</div>
+                        <div class="admin-stat-card__content">
+                            <span class="admin-stat-card__value" id="newOrders">0</span>
+                            <span class="admin-stat-card__label">Новые</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-card__icon">⏳</div>
+                        <div class="admin-stat-card__content">
+                            <span class="admin-stat-card__value" id="inProgressOrders">0</span>
+                            <span class="admin-stat-card__label">В работе</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-card__icon">✅</div>
+                        <div class="admin-stat-card__content">
+                            <span class="admin-stat-card__value" id="completedOrders">0</span>
+                            <span class="admin-stat-card__label">Завершённые</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card__header">
+                        <h2 class="admin-card__title">Последние заявки</h2>
+                        <a href="#" class="admin-card__link" data-view="orders">Все заявки →</a>
+                    </div>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Имя</th>
+                                    <th>Контакт</th>
+                                    <th>Тип</th>
+                                    <th>Бюджет</th>
+                                    <th>Статус</th>
+                                    <th>Дата</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersTable">
+                                <tr>
+                                    <td colspan="7" class="admin-table__empty">Загрузка...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders View -->
+            <div class="admin-view" id="view-orders">
+                <div class="admin-filters">
+                    <select class="admin-filter" id="statusFilter">
+                        <option value="all">Все статусы</option>
+                        <option value="new">Новые</option>
+                        <option value="in_progress">В работе</option>
+                        <option value="completed">Завершённые</option>
+                        <option value="cancelled">Отменённые</option>
+                    </select>
+                    <input type="text" class="admin-search" id="searchInput" placeholder="Поиск...">
+                </div>
+                <div class="admin-card">
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Имя</th>
+                                    <th>Контакт</th>
+                                    <th>Тип</th>
+                                    <th>Бюджет</th>
+                                    <th>Сообщение</th>
+                                    <th>Статус</th>
+                                    <th>Дата</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allOrdersTable">
+                                <tr>
+                                    <td colspan="9" class="admin-table__empty">Загрузка...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div class="admin-view" id="view-analytics">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h2 class="admin-card__title">Заявки по дням</h2>
+                        <div class="admin-chart" id="ordersChart">
+                            <div class="admin-chart__placeholder">📊 График загружается...</div>
+                        </div>
+                    </div>
+                    <div class="admin-card">
+                        <h2 class="admin-card__title">Популярные услуги</h2>
+                        <div class="admin-chart" id="servicesChart">
+                            <div class="admin-chart__placeholder">📈 Статистика загружается...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div class="admin-view" id="view-settings">
+                <div class="admin-card">
+                    <h2 class="admin-card__title">Настройки панели</h2>
+                    <form class="admin-form" id="settingsForm">
+                        <div class="form-group">
+                            <label class="form-label">Пароль администратора</label>
+                            <input type="password" class="form-input" id="adminPassword" placeholder="Новый пароль">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email для уведомлений</label>
+                            <input type="email" class="form-input" id="notificationEmail" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telegram Chat ID (опционально)</label>
+                            <input type="text" class="form-input" id="telegramChatId" placeholder="123456789">
+                        </div>
+                        <button type="submit" class="btn btn--primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="admin-modal" id="orderModal">
+        <div class="admin-modal__overlay"></div>
+        <div class="admin-modal__content">
+            <button class="admin-modal__close" id="modalClose">&times;</button>
+            <div class="admin-modal__body" id="orderModalBody"></div>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html>
