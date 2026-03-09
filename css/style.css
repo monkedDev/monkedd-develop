@@ -3434,7 +3434,7 @@ em {
 .gap-4 { gap: 2rem; }
 
 /* ========================================
-   CANVAS BACKGROUND
+   CANVAS BACKGROUNDS
    ======================================== */
 
 .hero-canvas {
@@ -3445,7 +3445,31 @@ em {
     height: 100vh;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.5;
+}
+
+/* Stars Canvas */
+.stars-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+/* Wave Canvas */
+.wave-canvas {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.3;
 }
 
 /* ========================================
@@ -3674,39 +3698,6 @@ em {
 }
 
 .chat-widget__input button:hover {
-    transform: scale(1.1);
-}
-
-/* ========================================
-   QUICK ACTIONS
-   ======================================== */
-
-.quick-actions {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: var(--z-sticky);
-}
-
-.quick-action-btn {
-    width: 50px;
-    height: 50px;
-    background: var(--color-bg-white);
-    border: 2px solid var(--color-border);
-    border-radius: 50%;
-    font-size: 22px;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    box-shadow: var(--shadow-soft);
-}
-
-.quick-action-btn:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-text-inverse);
     transform: scale(1.1);
 }
 
@@ -3962,23 +3953,11 @@ em {
         right: -10px;
         height: 450px;
     }
-    
-    .quick-actions {
-        bottom: 20px;
-        right: 20px;
-        flex-direction: row;
-        justify-content: flex-end;
-    }
-    
-    .quick-action-btn {
-        width: 45px;
-        height: 45px;
-    }
-    
+
     .achievements__grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .chat-widget {
         bottom: 80px;
     }

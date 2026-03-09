@@ -1390,60 +1390,151 @@
     }
 
     // ========================================
-    // Quick Actions
+    // Stars Canvas (Twinkling Stars)
     // ========================================
 
-    class QuickActions {
+    class StarsCanvas {
         constructor() {
-            this.container = document.getElementById('quickActions');
-            if (!this.container) return;
+            this.canvas = document.getElementById('starsCanvas');
+            if (!this.canvas) return;
+            
+            this.ctx = this.canvas.getContext('2d');
+            this.stars = [];
+            this.starCount = 150;
             
             this.init();
         }
 
         init() {
-            this.container.addEventListener('click', (e) => {
-                const btn = e.target.closest('.quick-action-btn');
-                if (!btn) return;
-
-                const action = btn.dataset.action;
-                this.handleAction(action);
-            });
+            this.resize();
+            this.createStars();
+            this.animate();
+            
+            window.addEventListener('resize', () => this.resize());
         }
 
-        handleAction(action) {
-            switch(action) {
-                case 'scroll-top':
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    break;
-                case 'theme-toggle':
-                    const event = new Event('click');
-                    document.getElementById('themeToggle')?.dispatchEvent(event);
-                    break;
-                case 'share':
-                    this.share();
-                    break;
-                case 'contacts':
-                    document.querySelector('#contacts')?.scrollIntoView({ behavior: 'smooth' });
-                    break;
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+
+        createStars() {
+            this.stars = [];
+            for (let i = 0; i < this.starCount; i++) {
+                this.stars.push({
+                    x: Math.random() * this.canvas.width,
+                    y: Math.random() * this.canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    alpha: Math.random(),
+                    alphaSpeed: 0.01 + Math.random() * 0.02,
+                    twinkle: Math.random() > 0.5
+                });
             }
         }
 
-        async share() {
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: 'monkedDev — Создание сайтов',
-                        text: 'Закажите современный сайт у monkedDev!',
-                        url: window.location.href
-                    });
-                } catch (err) {
-                    console.log('Share canceled');
+        animate() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            this.stars.forEach(star => {
+                // Twinkle effect
+                if (star.twinkle) {
+                    star.alpha += star.alphaSpeed;
+                    if (star.alpha > 1 || star.alpha < 0.2) {
+                        star.alphaSpeed *= -1;
+                    }
                 }
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('Ссылка скопирована в буфер обмена!');
+
+                // Draw star
+                this.ctx.beginPath();
+                this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                this.ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                this.ctx.fill();
+
+                // Star glow
+                const gradient = this.ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 4);
+                gradient.addColorStop(0, `rgba(255, 255, 255, ${star.alpha * 0.5})`);
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                this.ctx.fillStyle = gradient;
+                this.ctx.beginPath();
+                this.ctx.arc(star.x, star.y, star.size * 4, 0, Math.PI * 2);
+                this.ctx.fill();
+            });
+
+            requestAnimationFrame(() => this.animate());
+        }
+    }
+
+    // ========================================
+    // Wave Canvas (Flowing Waves)
+    // ========================================
+
+    class WaveCanvas {
+        constructor() {
+            this.canvas = document.getElementById('waveCanvas');
+            if (!this.canvas) return;
+            
+            this.ctx = this.canvas.getContext('2d');
+            this.waves = [];
+            this.waveCount = 5;
+            this.time = 0;
+            
+            this.init();
+        }
+
+        init() {
+            this.resize();
+            this.createWaves();
+            this.animate();
+            
+            window.addEventListener('resize', () => this.resize());
+        }
+
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = 300;
+        }
+
+        createWaves() {
+            this.waves = [];
+            for (let i = 0; i < this.waveCount; i++) {
+                this.waves.push({
+                    y: this.canvas.height / 2 + i * 40,
+                    amplitude: 20 + Math.random() * 30,
+                    frequency: 0.005 + Math.random() * 0.01,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.02 + Math.random() * 0.02,
+                    color: `rgba(123, 143, 212, ${0.1 + i * 0.05})`
+                });
             }
+        }
+
+        animate() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.time += 1;
+
+            this.waves.forEach(wave => {
+                wave.phase += wave.speed;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, wave.y);
+
+                for (let x = 0; x < this.canvas.width; x++) {
+                    const y = wave.y + Math.sin(x * wave.frequency + wave.phase + this.time * 0.02) * wave.amplitude;
+                    this.ctx.lineTo(x, y);
+                }
+
+                this.ctx.lineTo(this.canvas.width, this.canvas.height);
+                this.ctx.lineTo(0, this.canvas.height);
+                this.ctx.closePath();
+                
+                const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                gradient.addColorStop(0, wave.color);
+                gradient.addColorStop(1, 'rgba(123, 143, 212, 0)');
+                this.ctx.fillStyle = gradient;
+                this.ctx.fill();
+            });
+
+            requestAnimationFrame(() => this.animate());
         }
     }
 
@@ -1740,8 +1831,9 @@
        .use(StaggerAnimation)
        .use(MagneticButtons)
        .use(CanvasBackground)
+       .use(StarsCanvas)
+       .use(WaveCanvas)
        .use(ChatWidget)
-       .use(QuickActions)
        .use(EasterEgg)
        .use(TiltEffect)
        .use(Achievements)
