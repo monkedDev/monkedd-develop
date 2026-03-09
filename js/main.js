@@ -614,7 +614,7 @@
     }
 
     // ========================================
-    // Form Handling (Telegram + Web3Forms)
+    // Form Handling (LocalStorage - без сервера)
     // ========================================
 
     class FormHandler {
@@ -623,8 +623,8 @@
             this.statusElement = document.querySelector(SELECTORS.formStatus);
             if (!this.form) return;
 
-            // URL для Vercel API (замени после деплоя)
-            this.apiUrl = '/api/send-telegram';
+            // Ключ для localStorage
+            this.storageKey = 'monkeddev_orders';
 
             this.init();
         }
@@ -635,7 +635,7 @@
             this.initRealTimeValidation();
         }
 
-        async handleSubmit(e) {
+        handleSubmit(e) {
             e.preventDefault();
 
             // Validate form
@@ -663,27 +663,28 @@
                 const formData = new FormData(this.form);
                 const data = Object.fromEntries(formData.entries());
 
-                // Отправляем на наш API
-                const response = await fetch(this.apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                });
+                // Создаём заказ
+                const order = {
+                    id: Date.now().toString(),
+                    ...data,
+                    status: 'new',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                };
 
-                const result = await response.json();
+                // Сохраняем в localStorage
+                const orders = this.getOrders();
+                orders.unshift(order);
+                localStorage.setItem(this.storageKey, JSON.stringify(orders));
 
-                if (response.ok && result.success) {
-                    this.showStatus('Спасибо! Ваша заявка отправлена. Я свяжусь с вами в ближайшее время.', 'success');
-                    this.form.reset();
-                    this.showToast('Заявка успешно отправлена!', 'success');
-                    
-                    // Отправляем дубликат на Web3Forms (опционально)
-                    this.sendToWeb3Forms(data);
-                } else {
-                    throw new Error(result.error || 'Ошибка отправки');
-                }
+                // Успех!
+                this.showStatus('Спасибо! Ваша заявка отправлена. Я свяжусь с вами в ближайшее время.', 'success');
+                this.form.reset();
+                this.showToast('Заявка успешно отправлена!', 'success');
+
+                // Отправляем дубликат на Web3Forms (опционально)
+                this.sendToWeb3Forms(data);
+
             } catch (error) {
                 console.error('Form submission error:', error);
                 this.showStatus('Ошибка отправки. Попробуйте позже или свяжитесь напрямую.', 'error');
@@ -692,6 +693,11 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
             }
+        }
+
+        getOrders() {
+            const stored = localStorage.getItem(this.storageKey);
+            return stored ? JSON.parse(stored) : [];
         }
 
         // Опционально: дублирование на Web3Forms

@@ -1,14 +1,14 @@
 /**
- * monkedDev Admin Panel JavaScript
- * Управление заявками
+ * monkedDev Admin Panel - Client Side Only
+ * Хранение данных в localStorage (без сервера)
  */
 
 // ========================================
 // Constants & State
 // ========================================
 
-const API_URL = '/api/orders';
 const STORAGE_KEY = 'monkeddev_admin_token';
+const ORDERS_KEY = 'monkeddev_orders';
 
 let allOrders = [];
 let currentView = 'dashboard';
@@ -27,12 +27,14 @@ const refreshBtn = document.getElementById('refreshBtn');
 const exportBtn = document.getElementById('exportBtn');
 
 // ========================================
-// Authentication
+// Authentication (Simple Client-Side)
 // ========================================
+
+const ADMIN_PASSWORD = 'monkeddev2025'; // Поменяй на свой пароль
 
 function checkAuth() {
     const token = localStorage.getItem(STORAGE_KEY);
-    if (token) {
+    if (token === ADMIN_PASSWORD) {
         showDashboard();
     } else {
         showLogin();
@@ -50,27 +52,15 @@ function showDashboard() {
     loadOrders();
 }
 
-loginForm.addEventListener('submit', async (e) => {
+loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const password = document.getElementById('password').value;
     
-    try {
-        // Проверяем пароль через API
-        const response = await fetch(API_URL, {
-            headers: {
-                'Authorization': `Bearer ${password}`,
-            },
-        });
-
-        if (response.ok) {
-            localStorage.setItem(STORAGE_KEY, password);
-            showDashboard();
-        } else {
-            alert('Неверный пароль!');
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('Ошибка входа');
+    if (password === ADMIN_PASSWORD) {
+        localStorage.setItem(STORAGE_KEY, password);
+        showDashboard();
+    } else {
+        alert('Неверный пароль!');
     }
 });
 
@@ -78,6 +68,50 @@ logoutBtn.addEventListener('click', () => {
     localStorage.removeItem(STORAGE_KEY);
     showLogin();
 });
+
+// ========================================
+// Orders Management (localStorage)
+// ========================================
+
+function loadOrders() {
+    const stored = localStorage.getItem(ORDERS_KEY);
+    allOrders = stored ? JSON.parse(stored) : [];
+    updateStats();
+    renderRecentOrders();
+}
+
+function saveOrders() {
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(allOrders));
+    updateStats();
+}
+
+function addOrder(orderData) {
+    const order = {
+        id: Date.now().toString(),
+        ...orderData,
+        status: 'new',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    };
+    
+    allOrders.unshift(order);
+    saveOrders();
+    return order;
+}
+
+function updateOrderStatus(id, status) {
+    const order = allOrders.find(o => o.id === id);
+    if (order) {
+        order.status = status;
+        order.updatedAt = new Date().toISOString();
+        saveOrders();
+    }
+}
+
+function deleteOrder(id) {
+    allOrders = allOrders.filter(o => o.id !== id);
+    saveOrders();
+}
 
 // ========================================
 // Navigation
@@ -105,7 +139,6 @@ viewLinks.forEach(link => {
 function switchView(view) {
     currentView = view;
     
-    // Update sidebar
     sidebarLinks.forEach(link => {
         link.classList.remove('active');
         if (link.dataset.view === view) {
@@ -113,13 +146,11 @@ function switchView(view) {
         }
     });
     
-    // Update views
     document.querySelectorAll('.admin-view').forEach(v => {
         v.classList.remove('active');
     });
     document.getElementById(`view-${view}`).classList.add('active');
     
-    // Update title
     const titles = {
         dashboard: 'Дашборд',
         orders: 'Заявки',
@@ -128,7 +159,6 @@ function switchView(view) {
     };
     document.getElementById('pageTitle').textContent = titles[view] || 'Дашборд';
     
-    // Load data for view
     if (view === 'orders') {
         renderAllOrders();
     } else if (view === 'dashboard') {
@@ -139,35 +169,7 @@ function switchView(view) {
 }
 
 // ========================================
-// Load Orders
-// ========================================
-
-async function loadOrders() {
-    const token = localStorage.getItem(STORAGE_KEY);
-    
-    try {
-        const response = await fetch(API_URL, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-
-        const data = await response.json();
-        
-        if (data.success) {
-            allOrders = data.orders;
-            updateStats();
-            renderRecentOrders();
-        } else {
-            console.error('Failed to load orders:', data.error);
-        }
-    } catch (error) {
-        console.error('Load orders error:', error);
-    }
-}
-
-// ========================================
-// Render Stats
+// Stats
 // ========================================
 
 function updateStats() {
@@ -245,7 +247,7 @@ function renderAllOrders() {
             <td>${formatDate(order.createdAt)}</td>
             <td>
                 <button class="admin-btn-sm" onclick="viewOrder('${order.id}')">👁️</button>
-                <button class="admin-btn-sm" onclick="deleteOrder('${order.id}')">🗑️</button>
+                <button class="admin-btn-sm" onclick="deleteOrderById('${order.id}')">🗑️</button>
             </td>
         </tr>
     `).join('');
@@ -286,10 +288,10 @@ function escapeHtml(text) {
 }
 
 // ========================================
-// Order Actions
+// Modal Actions
 // ========================================
 
-window.viewOrder = async function(orderId) {
+window.viewOrder = function(orderId) {
     const order = allOrders.find(o => o.id === orderId);
     if (!order) return;
     
@@ -299,109 +301,50 @@ window.viewOrder = async function(orderId) {
     body.innerHTML = `
         <h2 style="margin-bottom: 20px;">Заявка #${order.id.slice(-6)}</h2>
         <div style="display: grid; gap: 15px;">
-            <div>
-                <strong>Имя:</strong> ${escapeHtml(order.name)}
-            </div>
-            <div>
-                <strong>Контакт:</strong> ${escapeHtml(order.contact)}
-            </div>
-            <div>
-                <strong>Тип проекта:</strong> ${escapeHtml(order.type || 'Не указан')}
-            </div>
-            <div>
-                <strong>Бюджет:</strong> ${escapeHtml(order.budget || 'Не указан')}
-            </div>
+            <div><strong>Имя:</strong> ${escapeHtml(order.name)}</div>
+            <div><strong>Контакт:</strong> ${escapeHtml(order.contact)}</div>
+            <div><strong>Тип проекта:</strong> ${escapeHtml(order.type || 'Не указан')}</div>
+            <div><strong>Бюджет:</strong> ${escapeHtml(order.budget || 'Не указан')}</div>
             <div>
                 <strong>Сообщение:</strong>
                 <p style="background: #F5F7FF; padding: 15px; border-radius: 8px; margin-top: 5px;">
                     ${escapeHtml(order.message)}
                 </p>
             </div>
-            <div>
-                <strong>Статус:</strong> ${renderStatus(order.status)}
-            </div>
-            <div>
-                <strong>Дата:</strong> ${formatDate(order.createdAt)}
-            </div>
-            <div>
-                <strong>IP:</strong> ${escapeHtml(order.ip)}
-            </div>
+            <div><strong>Статус:</strong> ${renderStatus(order.status)}</div>
+            <div><strong>Дата:</strong> ${formatDate(order.createdAt)}</div>
         </div>
         <div style="margin-top: 30px; display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn btn--primary" onclick="updateStatus('${order.id}', 'new')">🆕 Новая</button>
-            <button class="btn btn--outline" onclick="updateStatus('${order.id}', 'in_progress')">⏳ В работу</button>
-            <button class="btn btn--outline" onclick="updateStatus('${order.id}', 'completed')">✅ Завершена</button>
-            <button class="btn btn--outline" onclick="updateStatus('${order.id}', 'cancelled')">❌ Отменена</button>
+            <button class="btn btn--primary" onclick="updateOrderStatus('${order.id}', 'new')">🆕 Новая</button>
+            <button class="btn btn--outline" onclick="updateOrderStatus('${order.id}', 'in_progress')">⏳ В работу</button>
+            <button class="btn btn--outline" onclick="updateOrderStatus('${order.id}', 'completed')">✅ Завершена</button>
+            <button class="btn btn--outline" onclick="updateOrderStatus('${order.id}', 'cancelled')">❌ Отменена</button>
         </div>
     `;
     
     modal.classList.add('active');
 };
 
-window.updateStatus = async function(orderId, status) {
-    const token = localStorage.getItem(STORAGE_KEY);
-    
-    try {
-        const response = await fetch(API_URL, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ id: orderId, status }),
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            const order = allOrders.find(o => o.id === orderId);
-            if (order) order.status = status;
-            updateStats();
-            renderAllOrders();
-            renderRecentOrders();
-            document.getElementById('orderModal').classList.remove('active');
-        }
-    } catch (error) {
-        console.error('Update status error:', error);
-    }
+window.updateOrderStatus = function(orderId, status) {
+    updateOrderStatus(orderId, status);
+    renderAllOrders();
+    renderRecentOrders();
+    document.getElementById('orderModal').classList.remove('active');
 };
 
-window.deleteOrder = async function(orderId) {
+window.deleteOrderById = function(orderId) {
     if (!confirm('Удалить эту заявку?')) return;
-    
-    const token = localStorage.getItem(STORAGE_KEY);
-    
-    try {
-        const response = await fetch(`${API_URL}?id=${orderId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            allOrders = allOrders.filter(o => o.id !== orderId);
-            updateStats();
-            renderAllOrders();
-            renderRecentOrders();
-        }
-    } catch (error) {
-        console.error('Delete order error:', error);
-    }
+    deleteOrder(orderId);
+    renderAllOrders();
+    renderRecentOrders();
 };
 
 // ========================================
-// Filters & Search
+// Filters & Export
 // ========================================
 
 document.getElementById('statusFilter').addEventListener('change', renderAllOrders);
 document.getElementById('searchInput').addEventListener('input', renderAllOrders);
-
-// ========================================
-// Modal
-// ========================================
 
 document.getElementById('modalClose').addEventListener('click', () => {
     document.getElementById('orderModal').classList.remove('active');
@@ -410,10 +353,6 @@ document.getElementById('modalClose').addEventListener('click', () => {
 document.querySelector('.admin-modal__overlay').addEventListener('click', () => {
     document.getElementById('orderModal').classList.remove('active');
 });
-
-// ========================================
-// Refresh & Export
-// ========================================
 
 refreshBtn.addEventListener('click', loadOrders);
 
@@ -446,7 +385,6 @@ exportBtn.addEventListener('click', () => {
 // ========================================
 
 function renderAnalytics() {
-    // Simple analytics - can be enhanced with charts library
     const ordersByDay = {};
     const ordersByType = {};
     
@@ -478,7 +416,7 @@ function renderAnalytics() {
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="width: 150px; font-size: 13px;">${type}</span>
                     <div style="flex: 1; height: 30px; background: #F0F4FF; border-radius: 8px; overflow: hidden;">
-                        <div style="width: ${(count / allOrders.length) * 100}%; height: 100%; background: linear-gradient(90deg, #6B7FC4, #8A9FD4);"></div>
+                        <div style="width: ${(count / Math.max(allOrders.length, 1)) * 100}%; height: 100%; background: linear-gradient(90deg, #6B7FC4, #8A9FD4);"></div>
                     </div>
                     <span style="width: 30px; text-align: right; font-weight: 600;">${count}</span>
                 </div>
@@ -486,6 +424,16 @@ function renderAnalytics() {
         </div>
     `;
 }
+
+// ========================================
+// Form Handler (для интеграции с сайтом)
+// ========================================
+
+window.submitOrderToAdmin = function(formData) {
+    const orderData = Object.fromEntries(formData);
+    addOrder(orderData);
+    return orderData;
+};
 
 // ========================================
 // Initialize

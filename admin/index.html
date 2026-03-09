@@ -24,7 +24,7 @@
                     <input type="password" id="password" class="form-input" placeholder="Введите пароль" required>
                 </div>
                 <button type="submit" class="btn btn--primary btn--full">Войти</button>
-                <p class="admin-login__hint">Пароль по умолчанию: monkeddev2025</p>
+                <p class="admin-login__hint">Пароль: monkeddev2025</p>
             </form>
         </div>
     </div>
@@ -73,12 +73,8 @@
             <header class="admin-header">
                 <h1 class="admin-header__title" id="pageTitle">Дашборд</h1>
                 <div class="admin-header__actions">
-                    <button class="admin-icon-btn" id="refreshBtn" title="Обновить">
-                        🔄
-                    </button>
-                    <button class="admin-icon-btn" id="exportBtn" title="Экспорт">
-                        📥
-                    </button>
+                    <button class="admin-icon-btn" id="refreshBtn" title="Обновить">🔄</button>
+                    <button class="admin-icon-btn" id="exportBtn" title="Экспорт">📥</button>
                 </div>
             </header>
 
@@ -202,22 +198,17 @@
             <!-- Settings View -->
             <div class="admin-view" id="view-settings">
                 <div class="admin-card">
-                    <h2 class="admin-card__title">Настройки панели</h2>
-                    <form class="admin-form" id="settingsForm">
-                        <div class="form-group">
-                            <label class="form-label">Пароль администратора</label>
-                            <input type="password" class="form-input" id="adminPassword" placeholder="Новый пароль">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email для уведомлений</label>
-                            <input type="email" class="form-input" id="notificationEmail" placeholder="email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Telegram Chat ID (опционально)</label>
-                            <input type="text" class="form-input" id="telegramChatId" placeholder="123456789">
-                        </div>
-                        <button type="submit" class="btn btn--primary">Сохранить</button>
-                    </form>
+                    <h2 class="admin-card__title">О системе</h2>
+                    <div style="padding: 25px;">
+                        <p><strong>Админ-панель:</strong> monkedDev v1.0</p>
+                        <p><strong>Хранение:</strong> localStorage браузера</p>
+                        <p><strong>Пароль:</strong> monkeddev2025 (измени в js/admin.js)</p>
+                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #E0E5F0;">
+                        <p style="color: #EF4444;">⚠️ Данные хранятся только в этом браузере. При очистке кэша они пропадут.</p>
+                        <button class="btn btn--outline" onclick="if(confirm('Очистить все заявки?')) { localStorage.removeItem('monkeddev_orders'); location.reload(); }" style="margin-top: 15px;">
+                            🗑️ Очистить все заявки
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
