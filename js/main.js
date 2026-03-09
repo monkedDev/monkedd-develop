@@ -982,6 +982,242 @@
     }
 
     // ========================================
+    // Typing Animation
+    // ========================================
+
+    class TypingAnimation {
+        constructor() {
+            this.element = document.querySelector('.typing-text');
+            if (!this.element) return;
+            
+            this.phrases = [
+                '💻 Лендинги от 8 000 ₽',
+                '🛒 Интернет-магазины от 25 000 ₽',
+                '📱 Telegram-боты от 5 000 ₽',
+                '🎨 Уникальный дизайн',
+                '🚀 Быстрая загрузка',
+                '📈 SEO-оптимизация'
+            ];
+            this.phraseIndex = 0;
+            this.charIndex = 0;
+            this.isDeleting = false;
+            this.typingSpeed = 100;
+            this.deletingSpeed = 50;
+            this.pauseTime = 2000;
+            
+            this.init();
+        }
+
+        init() {
+            this.type();
+        }
+
+        type() {
+            const currentPhrase = this.phrases[this.phraseIndex];
+            
+            if (this.isDeleting) {
+                this.element.textContent = currentPhrase.substring(0, this.charIndex - 1);
+                this.charIndex--;
+                this.typingSpeed = this.deletingSpeed;
+            } else {
+                this.element.textContent = currentPhrase.substring(0, this.charIndex + 1);
+                this.charIndex++;
+                this.typingSpeed = 100;
+            }
+
+            if (!this.isDeleting && this.charIndex === currentPhrase.length) {
+                this.typingSpeed = this.pauseTime;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.charIndex === 0) {
+                this.isDeleting = false;
+                this.phraseIndex = (this.phraseIndex + 1) % this.phrases.length;
+                this.typingSpeed = 500;
+            }
+
+            setTimeout(() => this.type(), this.typingSpeed);
+        }
+    }
+
+    // ========================================
+    // Countdown Timer
+    // ========================================
+
+    class CountdownTimer {
+        constructor() {
+            this.countdown = document.getElementById('countdown');
+            if (!this.countdown) return;
+            
+            this.daysEl = document.getElementById('days');
+            this.hoursEl = document.getElementById('hours');
+            this.minutesEl = document.getElementById('minutes');
+            this.secondsEl = document.getElementById('seconds');
+            
+            // Set end date to end of current month
+            const now = new Date();
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+            this.endDate = endOfMonth.getTime();
+            
+            this.init();
+        }
+
+        init() {
+            this.updateCountdown();
+            setInterval(() => this.updateCountdown(), 1000);
+        }
+
+        updateCountdown() {
+            const now = new Date().getTime();
+            const distance = this.endDate - now;
+
+            if (distance < 0) {
+                // Reset to next month if expired
+                const now = new Date();
+                const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+                this.endDate = endOfMonth.getTime();
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            this.daysEl.textContent = String(days).padStart(2, '0');
+            this.hoursEl.textContent = String(hours).padStart(2, '0');
+            this.minutesEl.textContent = String(minutes).padStart(2, '0');
+            this.secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+    }
+
+    // ========================================
+    // Parallax Effect
+    // ========================================
+
+    class ParallaxEffect {
+        constructor() {
+            this.shapes = document.querySelectorAll('.shape-3d');
+            this.floatingCards = document.querySelectorAll('.hero__floating-card');
+            this.init();
+        }
+
+        init() {
+            window.addEventListener('scroll', () => this.handleScroll());
+            document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        }
+
+        handleScroll() {
+            const scrolled = window.scrollY;
+            
+            this.shapes.forEach((shape, index) => {
+                const speed = 0.1 + (index * 0.05);
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        }
+
+        handleMouseMove(e) {
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+
+            this.floatingCards.forEach((card, index) => {
+                const speed = (index + 1) * 10;
+                card.style.transform = `translate(${mouseX * speed}px, ${mouseY * speed}px)`;
+            });
+        }
+    }
+
+    // ========================================
+    // Reveal on Scroll
+    // ========================================
+
+    class RevealOnScroll {
+        constructor() {
+            this.elements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
+            this.init();
+        }
+
+        init() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            this.elements.forEach(el => observer.observe(el));
+        }
+    }
+
+    // ========================================
+    // Stagger Animation
+    // ========================================
+
+    class StaggerAnimation {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            const staggerContainers = document.querySelectorAll('.services__grid, .portfolio__grid, .benefits__grid');
+            
+            staggerContainers.forEach(container => {
+                const items = container.children;
+                Array.from(items).forEach((item, index) => {
+                    item.classList.add('stagger-item');
+                    item.style.transitionDelay = `${index * 100}ms`;
+                });
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const items = entry.target.children;
+                        Array.from(items).forEach(item => {
+                            item.classList.add('visible');
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            staggerContainers.forEach(container => observer.observe(container));
+        }
+    }
+
+    // ========================================
+    // Magnetic Buttons
+    // ========================================
+
+    class MagneticButtons {
+        constructor() {
+            this.buttons = document.querySelectorAll('.btn--primary, .magnetic-btn');
+            this.init();
+        }
+
+        init() {
+            this.buttons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => this.handleMouseMove(e, btn));
+                btn.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, btn));
+            });
+        }
+
+        handleMouseMove(e, btn) {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        }
+
+        handleMouseLeave(e, btn) {
+            btn.style.transform = 'translate(0, 0)';
+        }
+    }
+
+    // ========================================
     // Console Message
     // ========================================
 
@@ -1047,6 +1283,12 @@
        .use(ScrollIndicator)
        .use(RippleEffect)
        .use(LazyLoad)
+       .use(TypingAnimation)
+       .use(CountdownTimer)
+       .use(ParallaxEffect)
+       .use(RevealOnScroll)
+       .use(StaggerAnimation)
+       .use(MagneticButtons)
        .use(ConsoleMessage);
 
     app.init();

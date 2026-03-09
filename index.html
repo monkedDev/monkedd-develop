@@ -145,6 +145,9 @@
                     Создаю сайты, которые
                     <span class="title-gradient">работают на ваш бизнес</span>
                 </h1>
+                <div class="hero__typing">
+                    <span class="typing-text"></span><span class="typing-cursor">|</span>
+                </div>
                 <p class="hero__subtitle">
                     Индивидуальная разработка, современный дизайн и внимание к деталям. 
                     Ваш проект — моя забота. От идеи до запуска под ключ.
@@ -200,6 +203,16 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 3D Background Elements -->
+        <div class="hero__3d-shapes">
+            <div class="shape-3d shape-1"></div>
+            <div class="shape-3d shape-2"></div>
+            <div class="shape-3d shape-3"></div>
+            <div class="shape-3d shape-4"></div>
+            <div class="shape-3d shape-5"></div>
+        </div>
+        
         <div class="hero__scroll-indicator" id="heroScrollIndicator">
             <div class="scroll-indicator__mouse">
                 <div class="scroll-indicator__wheel"></div>
@@ -930,6 +943,63 @@
         </div>
     </section>
 
+    <!-- Special Offer с Countdown -->
+    <section class="special-offer section" id="specialOffer">
+        <div class="container special-offer__container">
+            <div class="special-offer__content">
+                <div class="special-offer__badge">
+                    <span class="badge-glow"></span>
+                    ⚡ Special Offer
+                </div>
+                <h2 class="special-offer__title">Ограниченное предложение!</h2>
+                <p class="special-offer__desc">Закажите сайт до конца месяца и получите в подарок:</p>
+                <div class="special-offer__bonuses">
+                    <div class="bonus-item">
+                        <span class="bonus-item__icon">🎁</span>
+                        <span class="bonus-item__text">SEO-оптимизацию</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="bonus-item__icon">📊</span>
+                        <span class="bonus-item__text">Яндекс.Метрику</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="bonus-item__icon">📱</span>
+                        <span class="bonus-item__text">Адаптивную вёрстку</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="bonus-item__icon">🚀</span>
+                        <span class="bonus-item__text">Быструю загрузку</span>
+                    </div>
+                </div>
+                <div class="countdown" id="countdown">
+                    <div class="countdown__item">
+                        <span class="countdown__number" id="days">00</span>
+                        <span class="countdown__label">Дней</span>
+                    </div>
+                    <div class="countdown__separator">:</div>
+                    <div class="countdown__item">
+                        <span class="countdown__number" id="hours">00</span>
+                        <span class="countdown__label">Часов</span>
+                    </div>
+                    <div class="countdown__separator">:</div>
+                    <div class="countdown__item">
+                        <span class="countdown__number" id="minutes">00</span>
+                        <span class="countdown__label">Минут</span>
+                    </div>
+                    <div class="countdown__separator">:</div>
+                    <div class="countdown__item">
+                        <span class="countdown__number" id="seconds">00</span>
+                        <span class="countdown__label">Секунд</span>
+                    </div>
+                </div>
+                <a href="#order" class="btn btn--primary btn--lg">
+                    <span>Забрать скидку</span>
+                    <span class="btn__sparkle">✨</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta section" id="cta">
         <div class="container cta__container">
@@ -1019,7 +1089,7 @@
                                 Тип проекта
                             </label>
                             <select id="type" name="type" class="form-input form-select">
-                                <option value="">Выберите тип</option>
+                                <option value="">Выберите т��п</option>
                                 <option value="Лендинг">Лендинг</option>
                                 <option value="Интернет-магазин">Интернет-магазин</option>
                                 <option value="Корпоративный сайт">Корпоративный сайт</option>
