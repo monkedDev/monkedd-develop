@@ -614,7 +614,7 @@
     }
 
     // ========================================
-    // Form Handling
+    // Form Handling (Telegram + Web3Forms)
     // ========================================
 
     class FormHandler {
@@ -622,7 +622,10 @@
             this.form = document.querySelector(SELECTORS.orderForm);
             this.statusElement = document.querySelector(SELECTORS.formStatus);
             if (!this.form) return;
-            
+
+            // URL для Vercel API (замени после деплоя)
+            this.apiUrl = '/api/send-telegram';
+
             this.init();
         }
 
@@ -656,28 +659,55 @@
             submitBtn.innerHTML = '<span class="btn__loader"></span> Отправка...';
 
             try {
+                // Собираем данные формы
                 const formData = new FormData(this.form);
+                const data = Object.fromEntries(formData.entries());
 
-                const response = await fetch(this.form.action, {
+                // Отправляем на наш API
+                const response = await fetch(this.apiUrl, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
                 });
 
                 const result = await response.json();
 
-                if (result.success || response.ok) {
+                if (response.ok && result.success) {
                     this.showStatus('Спасибо! Ваша заявка отправлена. Я свяжусь с вами в ближайшее время.', 'success');
                     this.form.reset();
                     this.showToast('Заявка успешно отправлена!', 'success');
+                    
+                    // Отправляем дубликат на Web3Forms (опционально)
+                    this.sendToWeb3Forms(data);
                 } else {
-                    throw new Error(result.message || 'Ошибка отправки');
+                    throw new Error(result.error || 'Ошибка отправки');
                 }
             } catch (error) {
+                console.error('Form submission error:', error);
                 this.showStatus('Ошибка отправки. Попробуйте позже или свяжитесь напрямую.', 'error');
                 this.showToast('Ошибка отправки формы', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
+            }
+        }
+
+        // Опционально: дублирование на Web3Forms
+        async sendToWeb3Forms(data) {
+            try {
+                const web3FormData = new FormData();
+                Object.keys(data).forEach(key => {
+                    web3FormData.append(key, data[key]);
+                });
+                
+                await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: web3FormData,
+                });
+            } catch (error) {
+                console.error('Web3Forms error:', error);
             }
         }
 
